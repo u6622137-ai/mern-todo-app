@@ -11,27 +11,25 @@ pipeline {
         stage('Build') {
             steps {
                 script {
-                    docker.image('node:18-alpine').inside {
 
-                        // Backend dependencies
-                        dir('TODO/todo_backend') {
-                            sh 'npm install'
-                        }
+                    sh '''
+                    docker run --rm -v $(pwd):/app -w /app node:18-alpine sh -c "
+                        cd TODO/todo_backend && npm install
+                    "
+                    '''
 
-                        // Frontend build
-                        dir('TODO/todo_frontend') {
-                            sh 'npm install'
-                            sh 'npm run build'
-                        }
+                    sh '''
+                    docker run --rm -v $(pwd):/app -w /app node:18-alpine sh -c "
+                        cd TODO/todo_frontend && npm install && npm run build
+                    "
+                    '''
 
-                        // Move frontend build to backend/static
-                        dir('TODO') {
-                            sh 'mkdir -p todo_backend/static'
-                            sh 'rm -rf todo_backend/static/build'
-                            sh 'mv todo_frontend/build todo_backend/static'
-                        }
-
-                    }
+                    sh '''
+                    cd TODO
+                    mkdir -p todo_backend/static
+                    rm -rf todo_backend/static/build
+                    mv todo_frontend/build todo_backend/static
+                    '''
                 }
             }
         }
