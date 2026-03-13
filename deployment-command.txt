@@ -1,0 +1,7 @@
+To test the deployment, execute the following Docker run command:
+
+```bash
+docker run -p 8080:5000 -e MONGODB_URI="mongodb+srv://vmes-ead:WQW4TVXAAvgoQoYb@cluster0.xzkm7.mongodb.net/?appName=Cluster0" [your-username]/finead-todo-app:latest
+```
+
+This uses the provided MongoDB Atlas URI (Option 1). Make sure the instructor replaces `[your-username]` with the actual Docker Hub username that pushed the image!
